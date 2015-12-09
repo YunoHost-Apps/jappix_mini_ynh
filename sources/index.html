@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="//DOMAINTOCHANGE/SITETOCHANGE/jquery.min.js"></script>
+<script type="text/javascript">
+    jQuery.ajaxSetup({cache: false});
+<!--    jQuery.getScript('https://DOMAINTOCHANGE/SITETOCHANGE/mini/javascripts/mini.js', function() { -->
+  jQuery.getScript("https://static.jappix.com/server/get.php?l=en&t=js&g=mini.xml", function() {
+        HOST_BOSH = 'https://DOMAINTOCHANGE/http-bind/';
+        JappixMini.launch({
+            connection: {
+              domain: 'anonymous.jappix.com'
+            },
+
+            application: {
+              network: {
+                autoconnect: false
+              },
+
+              interface: {
+                showpane: false,
+                animate: true
+              },
+
+              chat: {
+                open: ["USERTOCHANGE"]
+              },
+
+              groupchat: {
+                open: ["MUCTOCHANGE"]
+              }
+            }
+        });
+    });
+</script>
+</head>
+<body>
+<h1>It works !</h1>
+<p>Congratulation, you have just installed your custom web app with Jappix Mini.</p>
+<br>
+<br>
+<p>Place your files in /var/www/PATHTOCHANGE to install your site.</p>
+<br>
+<br>
+<p>As a reward, here is a random cat picture:</p>
+<p><img src="http://thecatapi.com/api/images/get?format=src&type=gif"></p>
+</body>

@@ -1,0 +1,11 @@
+### DNS configuration
+```bash
+anonymous.domain.tld IP_address # For anonymous XMPP server
+14400 IN SRV 0 5 5222 anonymous.domain.tld.
+14400 IN SRV 0 5 5269 anonymous.domain.tld.
+```
+
+### Add domain name
+```bash
+sudo yunohost domain add anonymous.domain.tld
+```

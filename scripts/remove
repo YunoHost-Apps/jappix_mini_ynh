@@ -1,0 +1,16 @@
+#!/bin/bash
+
+app=jappix_mini
+
+sitename=$(sudo yunohost app setting $app sitename)
+domain=$(sudo yunohost app setting $app domain)
+final_path=$(sudo yunohost app setting $app final_path)
+
+
+# Remove Jappix Mini repository
+sudo rm -rf $final_path
+
+# Remove Jappix Mini Nginx config
+sudo rm -f /etc/nginx/conf.d/$domain.d/$app.conf
+
+sudo service nginx reload

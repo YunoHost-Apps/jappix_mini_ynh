@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Retrieve arguments
+app=jappix_mini
+
+#domain=$(sudo yunohost app setting $app domain)
+path=$(sudo yunohost app setting $app path)
+sitename=$(sudo yunohost app setting $app sitename)
+is_public=$(sudo yunohost app setting $app is_public)
+final_path=$(sudo yunohost app setting $app final_path)
+
+# Modify Nginx configuration file and copy it to Nginx conf directory
+sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
+sed -i "s@ALIASTOCHANGE@$final_path/@g" ../conf/nginx.conf
+sed -i "s@NAMETOCHANGE@$domain\_$sitename@g" ../conf/nginx.conf
+sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
+
+# Adjust permissions
+sudo chmod 775 -R $final_path
+sudo chown -hR www-data:www-data $final_path
+
+# Make app public if necessary
+sudo yunohost app setting $app is_public -v "$is_public"
+if [ "$is_public" = "Yes" ];
+then
+    sudo yunohost app setting $app skipped_uris -v "/"
+else
+    sudo yunohost app setting $app protected_uris -v "/"
+fi
+
+# Reload Nginx
+sudo service nginx reload

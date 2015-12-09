@@ -1,0 +1,60 @@
+{
+    "name": "Jappix Mini",
+    "id": "jappix_mini",
+    "description": {
+        "en": "Jappix Mini XMPP chat website integration.",
+        "fr": "Intégration du Jappix Mini chat XMPP"
+    },
+    "license": "free",
+    "maintainer": {
+        "name": "Moul",
+        "email": "moul@moul.re"
+    },
+    "multi_instance": "true",
+    "arguments": {
+        "install" : [
+            {
+                "name": "domain",
+                "ask": {
+                    "en": "Choose a domain for Jappix Mini",
+                    "fr": "Choisissez un nom de domaine pour Jappix Mini"
+                },
+                "example": "domain.org"
+            },
+            {
+                "name": "path",
+                "ask": {
+                    "en": "Choose a path for Jappix Mini",
+                    "fr": "Choisissez un chemin pour Jappix Mini"
+                },
+                "example": "/mini",
+                "default": "/mini"
+            },
+            {
+                "name": "is_public",
+                "ask": {
+                    "en": "Make this website public?",
+                    "fr": "Rendre ce site publique ?"
+                },
+                "choices": ["Yes", "No"],
+                "default": "Yes"
+            },
+            {
+                "name": "user",
+                "ask": {
+                    "en": "Which user should Jappix Mini join? Answer 'No' to join no user. Next step is for joining a chat room.",
+                    "fr": "Jappix Mini doit rejoindre quel utilisateur ? Répondre « No » pour qu’il ne rejoigne aucun utilisateur. L’étape suivante est pour rejoindre un salon de discussion."
+                },
+                "choices": ["user@domain.tld", "No"]
+            },
+            {
+                "name": "muc",
+                "ask": {
+                    "en": "Which chat room should Jappix Mini join? Answer 'No' if you don't want it to join a chat room.",
+                    "fr": "Jappix Mini doit rejoindre quel salon de discussion ? Répondre « No » pour qu’il ne rejoindre aucun salon de discussion."
+                },
+                "choices": ["chat_room@muc.domain.tld", "No"]
+            }
+        ]
+    }
+}

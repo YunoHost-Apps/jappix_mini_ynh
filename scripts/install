@@ -1,0 +1,88 @@
+#!/bin/bash
+
+# Retrieve arguments
+app=jappix_mini
+domain=$1
+path=$2
+is_public=$3
+user=$4
+muc=$5
+
+sudo yunohost app setting $app path -v $path
+
+# Check if anonymous.domain.tld domain is installed
+#if [[ -n $(sudo yunohost domain list | grep $domain) ]]; then
+#    echo 'domain name is installed'
+#else
+#    echo 'you need to setup anonymous.$domain before'
+#fi
+
+if [ $path = "/" ]
+then
+	sitename="root"
+else
+	# sitename == path without any "/"
+	sitename=$(echo $path | cut -d '/' -f 2)
+	# Removal of trailing /
+	# path can be null but not really an issue for the remaining commands
+	path=${path%/}
+fi
+
+final_path=/var/www/$app
+
+# Check domain/path availability
+sudo yunohost app checkurl $domain$path -a $app
+if [[ ! $? -eq 0 ]]; then
+    exit 1
+fi
+
+sudo yunohost app setting $app final_path -v $final_path
+#sudo yunohost app setting $app domain -v $domain
+sudo yunohost app setting $app sitename -v $sitename
+
+# Creation of folder
+sudo mkdir -p $final_path
+
+# Configure Jappix Mini and copy data
+sed -i "s@DOMAINTOCHANGE@$domain@g" ../sources/index.html
+sed -i "s@SITETOCHANGE@$sitename@g" ../sources/index.html
+sed -i "s@PATHTOCHANGE@$app@g" ../sources/index.html
+if [ "$user" = "No" -o "$user" = "no" ];
+then
+    sed -i "26s/open/suggest/g" ../sources/index.html
+else
+    sed -i "s/USERTOCHANGE/$user/g" ../sources/index.html
+fi
+if [ "$muc" = "No" -o "$muc" = "no" ];
+then
+    sed -i "30s/open/suggest/g" ../sources/index.html
+else
+    sed -i "s/MUCTOCHANGE/$muc/g" ../sources/index.html
+fi
+sudo cp -r ../sources/* $final_path/
+
+# Set permissions
+sudo chmod 775 -R $final_path
+sudo chown -hR www-data:www-data $final_path
+
+# Modify Nginx configuration file and copy it to Nginx conf directory
+sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
+sed -i "s@ALIASTOCHANGE@$final_path/@g" ../conf/nginx.conf
+sed -i "s@NAMETOCHANGE@$domain\_$sitename@g" ../conf/nginx.conf
+sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
+
+# Make app public if necessary
+sudo yunohost app setting $app is_public -v "$is_public"
+if [ "$is_public" = "Yes" ];
+then
+    sudo yunohost app setting $app skipped_uris -v "/"
+fi
+
+# Configure anonymous Metronome conf
+#sed -i "s@DOMAINTOCHANGE@$domain@g" ../conf/anonymous.domain.cfg.lua
+#sudo cp ../conf/anonymous.domain.cfg.lua /etc/metronome/conf.d/anonymous.$domain.cfg.lua
+# sed -i "s@metronome=no@metronome=yes@g" /etc/yunohost/yunohost.conf
+#sudo service metronome restart
+
+# Reload Nginx
+sudo service nginx reload
