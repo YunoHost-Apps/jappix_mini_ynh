@@ -22,11 +22,11 @@ muc 1800 IN CNAME domain.tld. # For multi-user chat rooms
 * [Jappix Mini tutorial configuration](https://mini.jappix.com/get)
 
 ### App state
-App is `working`. I want and I need help to fix two first todo:
+App is **`notworking` and no more maintained**. jappix project is dead.
 
 ### Todo
-* Use own Jappix Mini library, to avoid request to `jappix.com`.
-* Use Yunohost instance's XMPP server instead of using `anonymous.jappix.com` for anonymous connexion.
+* Use own Jappix Mini library, to avoid request to `jappix.com`: lib is no more retrievable as jappix.com is definitivly down.
+* Use Yunohost instance's XMPP server instead of using `anonymous.jappix.com` for anonymous connexion: jappix.com is down.
 * If possible, make Jappix Mini pluggable in every YunoHost web apps (HTML, PHP?) and to YunoHost SSO.
 * Add on every YunoHost SSO users interfaces a chat room to permit discuss. Not very secure with credentials stocked on the web page.
 * Backup, restore scripts?
